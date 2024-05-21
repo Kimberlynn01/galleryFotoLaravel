@@ -16,4 +16,14 @@ class Photo extends Model
     {
         return $this->belongsTo(User::class, 'userId', 'id');
     }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'statusId', 'id');
+    }
+
+    public function album()
+    {
+        return $this->belongsTo(Album::class, 'albumId', 'id');
+    }
 }

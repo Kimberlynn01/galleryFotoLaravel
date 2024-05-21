@@ -24,7 +24,7 @@
 
 @section('content')
     <div class="container mx-auto mt-5">
-        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+        <div class="overflow-x-auto  bg-white shadow-md rounded-lg">
             <table id="albumsTable" class="min-w-full bg-white">
                 <thead>
                     <tr class="w-full bg-gray-500 text-white">

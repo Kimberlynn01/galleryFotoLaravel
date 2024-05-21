@@ -11,10 +11,9 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->role == '1') {
-
+        if (Auth::user()->role === 1) {
             return view('dashboard.admin.template.profile');
-        }else if(Auth::user()->role == '2') {
+        }else if(Auth::user()->role === 2) {
             return view('dashboard.superadmin.template.profile');
         }else{
             return view('dashboard.member.template.profile');
@@ -30,7 +29,7 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => 'nullable|string|max:255',
-            'email' => 'nullable|string|email', // Menghapus aturan 'unique' dan menambahkan aturan email
+            'email' => 'nullable|string|email',
             'old_password' => 'required|string',
             'password' => 'nullable|string|min:2',
             'picture' => 'nullable|image',
@@ -40,15 +39,12 @@ class ProfileController extends Controller
             return redirect()->back()->withErrors(['old_password' => 'The old password is incorrect.'])->withInput();
         }
 
-        // Memperbarui nama jika diisi
         $user->name = $request->input('name');
 
-        // Memperbarui email hanya jika ada perubahan
         if ($request->input('email') && $request->input('email') !== $user->email) {
             $user->email = $request->input('email');
-            // Validasi email unik hanya jika ada perubahan email
             $request->validate([
-                'email' => 'unique:users,email', // Aturan validasi unik hanya saat email diubah
+                'email' => 'unique:users,email',
             ], [
                 'email.unique' => 'The email has already been taken.',
             ]);

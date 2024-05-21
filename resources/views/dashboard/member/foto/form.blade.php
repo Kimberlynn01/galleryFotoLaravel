@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-5">
-        <form class="max-w-sm mx-auto grid grid-cols-2 gap-4" action="{{ route('foto.form.post') }}" method="POST"
+        <form class="max-w mx-auto grid grid-cols-2 gap-4" action="{{ route('foto.form.post') }}" method="POST"
             enctype="multipart/form-data">
             @csrf
             <div>
@@ -11,7 +11,7 @@
                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                     placeholder="Nama Foto" name="nama_foto" required />
             </div>
-            <div>
+            {{-- <div>
                 <label for="album" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih
                     Album</label>
                 <select name="albumId" id="album" required
@@ -21,8 +21,8 @@
                         <option value="{{ $album->id }}">{{ $album->nama_album }}</option>
                     @endforeach
                 </select>
-            </div>
-            <div class="col-span-2">
+            </div> --}}
+            <div>
                 <label for="foto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih
                     Foto</label>
                 <input type="file" name="lokasifoto" id="foto" onchange="previewImage(event)" accept="image/*"

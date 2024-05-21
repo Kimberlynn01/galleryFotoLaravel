@@ -5,13 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard</title>
+    <title>Dashboard Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
+    @stack('styles')
     <style>
         .rotate-180 {
             transform: rotate(180deg);
+        }
+
+        .fixed-sidebar {
+            position: fixed;
+            height: 100%;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .fixed-navbar {
+            position: fixed;
+            width: calc(100% - 16rem);
+            /* Adjust width considering the sidebar width */
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 60px;
+            /* Adjust width considering the sidebar width */
+            z-index: 10;
+        }
+
+        .content {
+            margin-left: 16rem;
+            /* Same width as the sidebar */
+            margin-top: 4rem;
+            /* Same height as the navbar */
+        }
+
+        @media (max-width: 768px) {
+            .fixed-navbar {
+                width: 100%;
+            }
+
+            .fixed-sidebar {
+                margin-top: calc(64px);
+            }
+
+
+            footer {
+                position: relative;
+                bottom: 0;
+                left: 0px;
+                /* Adjust width considering the sidebar width */
+                z-index: 10;
+            }
+
+            .content {
+                margin-left: 0;
+                margin-top: 4rem;
+            }
         }
     </style>
 </head>
@@ -19,68 +75,44 @@
 <body class="bg-gray-100">
     <div class="flex">
         <!-- Sidebar -->
-        <div class="w-64 h-screen bg-purple-700 text-white flex flex-col">
+        <div class="w-64 bg-purple-700 text-white flex flex-col fixed-sidebar hidden md:block">
             <div class="flex items-center justify-center h-20 border-b border-purple-800">
-                <h1 class="text-2xl font-bold">Gallery Foto</h1>
+                <h1 class="text-2xl font-bold">Admin Foto</h1>
             </div>
             <div class="flex-1 overflow-y-auto">
                 <ul class="p-4">
                     <li class="mb-2">
-                        <a href="/" class="flex items-center p-2 rounded hover:bg-purple-700">
+                        <a href="/" class="flex items-center p-2 rounded hover:bg-purple-600">
                             <i class="fas fa-home mr-2"></i> Home
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="#" class="flex items-center p-2 rounded hover:bg-purple-700">
+                        <a href="/dashboard" class="flex items-center p-2 rounded hover:bg-purple-600">
                             <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
                         </a>
                     </li>
                     <li class="mb-2">
-                        <button
-                            class="dropdown-toggle w-full flex items-center p-2 rounded hover:bg-purple-700 focus:outline-none">
-                            <i class="fas fa-images mr-2"></i> Album
-                            <i class="arrow-icon fas fa-chevron-down ml-auto transition-transform duration-300"></i>
-                        </button>
-                        <ul class="dropdown-content hidden pl-6">
-                            <li class="mb-2">
-                                <a href="/member/tambahalbum" class="flex items-center p-2 rounded hover:bg-purple-700">
-                                    <i class="fas fa-plus mr-2"></i> Tambah Baru
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <a href="#" class="flex items-center p-2 rounded hover:bg-purple-700">
-                                    <i class="fas fa-clock mr-2"></i> Status
-                                </a>
-                            </li>
-                        </ul>
+                        <a href="/status" class="flex items-center p-2 rounded hover:bg-purple-600">
+                            <i class="fas fa-clock mr-2"></i> Status
+                        </a>
                     </li>
                     <li class="mb-2">
-                        <button
-                            class="dropdown-toggle w-full flex items-center p-2 rounded hover:bg-purple-700 focus:outline-none">
-                            <i class="fas fa-camera mr-2"></i> Foto
-                            <i class="arrow-icon fas fa-chevron-down ml-auto transition-transform duration-300"></i>
-                        </button>
-                        <ul class="dropdown-content hidden pl-6">
-                            <li class="mb-2">
-                                <a href="#" class="flex items-center p-2 rounded hover:bg-purple-700">
-                                    <i class="fas fa-plus mr-2"></i> Tambah Baru
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <a href="#" class="flex items-center p-2 rounded hover:bg-purple-700">
-                                    <i class="fas fa-list mr-2"></i> Category
-                                </a>
-                            </li>
-                        </ul>
+                        <a href="/status" class="flex items-center p-2 rounded hover:bg-purple-600">
+                            <i class="fas  fa-users  mr-2"></i> Manajemen Member
+                        </a>
                     </li>
+
                 </ul>
             </div>
+            <footer class="flex items-center justify-center h-20 border-t border-purple-800">
+                <p class="text-sm">© 2024 <a href="https://github.com/Kimberlynn01/">Danudiraja</a></p>
+            </footer>
         </div>
 
         <!-- Main content -->
         <div class="flex-1 flex flex-col">
             <!-- Header -->
-            <header class="h-16 bg-white shadow-md flex items-center justify-between px-4">
+            <header class="h-16 bg-white shadow-md flex items-center justify-between px-4 fixed-navbar">
                 <div class="flex items-center">
                     <button id="menuButton" class="text-blue-900 hover:text-blue-700 md:hidden">
                         <i class="fas fa-bars fa-2x"></i>
@@ -93,8 +125,8 @@
                     </button>
                     <button id="profileButton" class="text-gray-500 hover:text-gray-700 relative">
                         <div class="rounded-full overflow-hidden w-8 h-8 flex items-center justify-center">
-                            @if (!empty(Auth::user()->picture) && Auth::user()->picture->isEmpty())
-                                <img src="{{ Auth::user()->picture }}" alt="Profile Picture"
+                            @if (!empty(Auth::user()->picture))
+                                <img src="{{ '../storage/' . Auth::user()->picture }}" alt="Profile Picture"
                                     class="w-full h-full object-cover">
                             @else
                                 <i class="fas fa-user fa-2x"></i>
@@ -113,13 +145,11 @@
                             </li>
                         </ul>
                     </button>
-
-
                 </div>
             </header>
 
             <!-- Content -->
-            <main class="flex-1 p-4">
+            <main class="flex-1 p-4 content">
                 @yield('content')
             </main>
         </div>
@@ -127,7 +157,7 @@
 
     <script>
         document.getElementById('menuButton').addEventListener('click', function() {
-            document.querySelector('.w-64').classList.toggle('hidden');
+            document.querySelector('.fixed-sidebar').classList.toggle('hidden');
         });
 
         document.querySelectorAll('.dropdown-toggle').forEach(button => {
@@ -138,15 +168,13 @@
                 arrowIcon.classList.toggle('rotate-180');
             });
         });
-    </script>
-    <script>
+
         document.getElementById('profileButton').addEventListener('click', function() {
-            const dropdownMenu = document.getElementById('profileDropdown');
-            dropdownMenu.classList.toggle('hidden');
+            document.getElementById('profileDropdown').classList.toggle('hidden');
         });
     </script>
 
-
+    @stack('scripts')
 </body>
 
 </html>

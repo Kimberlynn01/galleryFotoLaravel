@@ -11,8 +11,11 @@ class FotoController extends Controller
 {
     public function index()
     {
-        $albums = Album::where("userId", Auth::user()->id)->get();
-        return view('dashboard.member.foto.index', compact('albums'));
+        $photos = Photo::with('status')->where("userId", Auth::user()->id)->get();
+
+
+
+        return view('dashboard.member.foto.index', compact('photos'));
     }
 
     public function form()
@@ -27,7 +30,6 @@ class FotoController extends Controller
             'nama_foto' => 'required',
             'deskripsi_foto' => 'required',
             'lokasifoto' => 'required|image|mimes:png,jpg,jpeg|max:2048',
-            'albumId' => 'required|exists:album,id',
         ]);
 
         if ($request->hasFile('lokasifoto')) {
@@ -38,11 +40,11 @@ class FotoController extends Controller
         Photo::create([
             'nama_foto' => $validate['nama_foto'],
             'deskripsi_foto' => $validate['deskripsi_foto'],
-            'albumId' => $validate['albumId'],
             'userId' => Auth::user()->id,
             'lokasifoto' => $validate['lokasifoto'],
+            'statusId' => 1,
         ]);
 
-        return redirect()->route('dashboard.index')->with('success', 'Successfully add photo.');
+        return redirect()->route('foto.index')->with('success', 'Successfully add photo.');
     }
 }

@@ -14,70 +14,125 @@
         .rotate-180 {
             transform: rotate(180deg);
         }
+
+        .fixed-sidebar {
+            position: fixed;
+            height: 100%;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .fixed-navbar {
+            position: fixed;
+            width: calc(100% - 16rem);
+            /* Adjust width considering the sidebar width */
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 60px;
+            /* Adjust width considering the sidebar width */
+            z-index: 10;
+        }
+
+        .content {
+            margin-left: 16rem;
+            /* Same width as the sidebar */
+            margin-top: 4rem;
+            /* Same height as the navbar */
+        }
+
+        @media (max-width: 768px) {
+            .fixed-navbar {
+                width: 100%;
+            }
+
+            .fixed-sidebar {
+                margin-top: calc(64px);
+            }
+
+
+            footer {
+                position: relative;
+                bottom: 0;
+                left: 0px;
+                /* Adjust width considering the sidebar width */
+                z-index: 10;
+            }
+
+            .content {
+                margin-left: 0;
+                margin-top: 4rem;
+            }
+        }
     </style>
 </head>
 
 <body class="bg-gray-100">
     <div class="flex">
         <!-- Sidebar -->
-        <div class="w-64 h-screen bg-purple-700 text-white flex flex-col fixed-sidebar">
+        <div class="w-64 bg-purple-700 text-white flex flex-col fixed-sidebar hidden md:block">
             <div class="flex items-center justify-center h-20 border-b border-purple-800">
                 <h1 class="text-2xl font-bold">Gallery Foto</h1>
             </div>
             <div class="flex-1 overflow-y-auto">
                 <ul class="p-4">
                     <li class="mb-2">
-                        <a href="/" class="flex items-center p-2 rounded hover:bg-purple-700">
+                        <a href="/" class="flex items-center p-2 rounded hover:bg-purple-600">
                             <i class="fas fa-home mr-2"></i> Home
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="/dashboard" class="flex items-center p-2 rounded hover:bg-purple-700">
+                        <a href="/dashboard" class="flex items-center p-2 rounded hover:bg-purple-600">
                             <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
                         </a>
                     </li>
                     <li class="mb-2">
                         <button
-                            class="dropdown-toggle w-full flex items-center p-2 rounded hover:bg-purple-700 focus:outline-none">
+                            class="dropdown-toggle w-full flex items-center p-2 rounded hover:bg-purple-600 focus:outline-none">
                             <i class="fas fa-images mr-2"></i> Album
                             <i class="arrow-icon fas fa-chevron-down ml-auto transition-transform duration-300"></i>
                         </button>
                         <ul class="dropdown-content hidden pl-6">
                             <li class="mb-2">
-                                <a href="/album/" class="flex items-center p-2 rounded hover:bg-purple-700">
+                                <a href="/album/" class="flex items-center p-2 rounded hover:bg-purple-600">
                                     <i class="fas fa-images mr-2"></i> Album
                                 </a>
-                                <a href="/album/tambah" class="flex items-center p-2 rounded hover:bg-purple-700">
+                                <a href="/album/tambah" class="flex items-center p-2 rounded hover:bg-purple-600">
                                     <i class="fas fa-plus mr-2"></i> Tambah Baru
                                 </a>
                             </li>
-
+                            <li class="mb-2">
+                                <a href="/album/sort" class="flex items-center p-2 rounded hover:bg-purple-600">
+                                    <i class="fas fa-list mr-2"></i> Category
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="mb-2">
                         <button
-                            class="dropdown-toggle w-full flex items-center p-2 rounded hover:bg-purple-700 focus:outline-none">
+                            class="dropdown-toggle w-full flex items-center p-2 rounded hover:bg-purple-600 focus:outline-none">
                             <i class="fas fa-camera mr-2"></i> Foto
                             <i class="arrow-icon fas fa-chevron-down ml-auto transition-transform duration-300"></i>
                         </button>
                         <ul class="dropdown-content hidden pl-6">
                             <li class="mb-2">
-                                <a href="/foto" class="flex items-center p-2 rounded hover:bg-purple-700">
+                                <a href="/foto" class="flex items-center p-2 rounded hover:bg-purple-600">
                                     <i class="fas fa-camera mr-2"></i> Foto
                                 </a>
                             </li>
                             <li class="mb-2">
-                                <a href="/foto/form" class="flex items-center p-2 rounded hover:bg-purple-700">
+                                <a href="/foto/form" class="flex items-center p-2 rounded hover:bg-purple-600">
                                     <i class="fas fa-plus mr-2"></i> Tambah Baru
                                 </a>
                             </li>
+
                             <li class="mb-2">
-                                <a href="/foto" class="flex items-center p-2 rounded hover:bg-purple-700">
-                                    <i class="fas fa-list mr-2"></i> Category
-                                </a>
-                            </li>
-                            <li class="mb-2">
-                                <a href="#" class="flex items-center p-2 rounded hover:bg-purple-700">
+                                <a href="/foto/status" class="flex items-center p-2 rounded hover:bg-purple-600">
                                     <i class="fas fa-clock mr-2"></i> Status
                                 </a>
                             </li>
@@ -126,13 +181,11 @@
                             </li>
                         </ul>
                     </button>
-
-
                 </div>
             </header>
 
             <!-- Content -->
-            <main class="flex-1 p-4 ">
+            <main class="flex-1 p-4 content">
                 @yield('content')
             </main>
         </div>
@@ -140,7 +193,7 @@
 
     <script>
         document.getElementById('menuButton').addEventListener('click', function() {
-            document.querySelector('.w-64').classList.toggle('hidden');
+            document.querySelector('.fixed-sidebar').classList.toggle('hidden');
         });
 
         document.querySelectorAll('.dropdown-toggle').forEach(button => {
@@ -151,16 +204,13 @@
                 arrowIcon.classList.toggle('rotate-180');
             });
         });
-    </script>
-    <script>
+
         document.getElementById('profileButton').addEventListener('click', function() {
-            const dropdownMenu = document.getElementById('profileDropdown');
-            dropdownMenu.classList.toggle('hidden');
+            document.getElementById('profileDropdown').classList.toggle('hidden');
         });
     </script>
 
     @stack('scripts')
-
 </body>
 
 </html>
