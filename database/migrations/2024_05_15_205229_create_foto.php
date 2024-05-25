@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('foto', function (Blueprint $table) {
             $table->id();
             $table->string('nama_foto');
-            $table->string('deskripsi_foto');
+            $table->text('deskripsi_foto');
             $table->string('lokasifoto');
             $table->foreignId('albumId')->nullable()->constrained('album')->cascadeOnDelete();
             $table->foreignId('statusId')->nullable()->constrained('status')->cascadeOnDelete();
