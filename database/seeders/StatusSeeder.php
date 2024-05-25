@@ -18,13 +18,16 @@ class StatusSeeder extends Seeder
                 'nama_status' => 'Sedang Diajukan'
             ],
             [
-                'nama_status' => 'Ajuan sedang ditinjau'
+                'nama_status' => 'Tinjau Ajuan'
             ],
             [
                 'nama_status' => 'Ajuan diterima',
             ],
             [
                 'nama_status' => 'Ajuan ditolak',
+            ],
+            [
+                'nama_status' => 'Approve',
             ],
         ];
 

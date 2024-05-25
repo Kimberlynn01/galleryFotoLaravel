@@ -87,5 +87,6 @@ Route::middleware(['auth', 'role:1'])->group(function () {
     // Route Status
     Route::prefix('/status')->name('status.')->group(function() {
         Route::get('/', [StatusController::class, 'index'])->name('index');
+        Route::put('/update/{id}', [StatusController::class, 'update'])->name('update');
     });
 });

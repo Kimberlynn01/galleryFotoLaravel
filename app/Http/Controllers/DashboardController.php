@@ -23,7 +23,9 @@ class DashboardController extends Controller
 
             $total = $statusId1 + $statusId2 + $statusId3 + $statusId4;
 
-            return view('dashboard.admin.dashboard', compact('statusId1', 'statusId2', 'statusId3', 'statusId4', 'total'));
+            $prosesStatus = Photo::with('status' )->where('statusId', 2)->count();
+
+            return view('dashboard.admin.dashboard', compact('statusId1', 'statusId2', 'statusId3', 'statusId4', 'total','prosesStatus'));
         }elseif (Auth::user()->role == '2') {
             return view('dashboard.superadmin.dashboard');
         }

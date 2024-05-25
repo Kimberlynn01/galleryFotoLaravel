@@ -8,6 +8,7 @@
     <title>Dashboard Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     @stack('styles')
     <style>
@@ -155,6 +156,9 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         document.getElementById('menuButton').addEventListener('click', function() {
             document.querySelector('.fixed-sidebar').classList.toggle('hidden');
@@ -172,6 +176,34 @@
         document.getElementById('profileButton').addEventListener('click', function() {
             document.getElementById('profileDropdown').classList.toggle('hidden');
         });
+    </script>
+
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        @if (Session::has('success'))
+            toastr.success("{{ Session::get('success') }}", "Success");
+        @endif
+
+        @if (Session::has('error'))
+            toastr.error("{{ Session::get('error') }}", "Error");
+        @endif
     </script>
 
     @stack('scripts')

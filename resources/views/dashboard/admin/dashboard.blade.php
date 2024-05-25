@@ -1,22 +1,20 @@
 @extends('dashboard.admin.template.main')
 
-
-@push('scripts')
+@push('styles')
     <style>
         .container {
-            max-width: 1200px;
             padding-left: 15px;
-
         }
 
         .row {
             display: flex;
             flex-wrap: wrap;
-
+            justify-content: center;
         }
 
         .col-md-6 {
-            width: 50%;
+            width: 40%;
+            margin-right: 10px;
         }
 
         .card {
@@ -28,7 +26,6 @@
 
         .card-header {
             background-color: #f8f9fa;
-
             padding: 10px;
             border-radius: 8px 8px 0 0;
         }
@@ -36,19 +33,34 @@
         .card-body {
             padding: 20px;
         }
+
+        .chart-container {
+            border-radius: 8px;
+            overflow: hidden;
+        }
     </style>
 @endpush
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6 me-2">
                 <div class="card">
                     <div class="card-header">
                         <h2 class="font-bold m-2">Total Pengajuan Foto</h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body chart-container">
                         <div id="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="font-bold m-2">Proses Pengajuan Foto</h2>
+                    </div>
+                    <div class="card-body chart-container">
+                        <div id="Proseschart"></div>
                     </div>
                 </div>
             </div>
@@ -56,17 +68,36 @@
     </div>
 @endsection
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-</script>
-
-
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         var options = {
             chart: {
-                type: 'bar'
+                type: 'bar',
+                foreColor: '#333',
+                toolbar: {
+                    show: false
+                },
+                dropShadow: {
+                    enabled: true,
+                    top: 3,
+                    left: 3,
+                    blur: 4,
+                    opacity: 0.2
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 3,
+                    columnWidth: '10%',
+                    dataLabels: {
+                        position: 'top',
+                    },
+                }
             },
             series: [{
                 name: 'Photo Status',
@@ -81,5 +112,41 @@
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
+
+        var Prosesoptions = {
+            chart: {
+                type: 'bar',
+                foreColor: '#333',
+                toolbar: {
+                    show: false
+                },
+                dropShadow: {
+                    enabled: true,
+                    top: 3,
+                    left: 3,
+                    blur: 4,
+                    opacity: 0.2
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 30,
+                    columnWidth: '10%',
+                    dataLabels: {
+                        position: 'top',
+                    },
+                }
+            },
+            series: [{
+                name: 'Proses Photo Status',
+                data: [{{ $prosesStatus }}]
+            }],
+            xaxis: {
+                categories: ['Ajuan Sedang ditinjau']
+            }
+        };
+
+        var Proseschart = new ApexCharts(document.querySelector("#Proseschart"), Prosesoptions);
+        Proseschart.render();
     </script>
 @endpush

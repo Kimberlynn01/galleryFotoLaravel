@@ -1,4 +1,5 @@
 @extends('dashboard.admin.template.main')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 @push('styles')
     <!-- DataTables CSS CDN -->
@@ -58,12 +59,11 @@
 @endpush
 
 @section('content')
-    <div class="container mx-auto mt-5">
+    <div class="mx-auto mt-5 ">
         <div class="overflow-x-auto bg-white shadow-md rounded-lg">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="font-bold text-xl ml-4 pt-4">Status Gallery</h2>
-                    <hr class="border-gray-300 my-4">
+                    <h2 class="font-bold text-xl m-2">Status Gallery</h2>
                 </div>
                 <div class="card-body">
                     <table id="albumsTable" class="min-w-full bg-white">
@@ -97,7 +97,7 @@
                                         {{ $photo->user->name }}</td>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"><a
                                             href="{{ '../storage/' . $photo->lokasifoto }}" target="_blank"
-                                            class="px-3 py-1 border rounded text-white hover:bg-purple-600 bg-purple-400 ">See
+                                            class="px-3 py-1 border rounded text-white hover:bg-purple-600 bg-purple-400 text-sm">See
                                             Photo</a></td>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         {{ $photo->nama_foto }}</td>
@@ -106,13 +106,72 @@
                                             {{ \Illuminate\Support\Str::limit($photo->deskripsi_foto, 17, '...') }}</button>
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <button type="button" id="status{{ $photo->statusId }}"
-                                            class="px-3 py-1 border rounded">{{ $photo->status->nama_status }}</button>
+                                        @if ($photo->statusId == 3)
+                                            <button type="button" id="status{{ $photo->statusId }}"
+                                                class="px-3 py-1 border rounded text-sm">{{ $photo->status->nama_status }}</button>
+                                        @else
+                                            <button type="button" id="status{{ $photo->statusId }}" data-bs-toggle="modal"
+                                                data-bs-target="#editStatus{{ $photo->id }}"
+                                                class="px-3 py-1 border rounded text-sm">{{ $photo->status->nama_status }}</button>
+                                        @endif
                                     </td>
+
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="editStatus{{ $photo->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <form action="{{ route('status.update', $photo->id) }}" method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Judul Modal</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-4">
+                                                            <label for="status"
+                                                                class="block text-gray-700 font-bold mb-2">Status
+                                                                Photo</label>
+                                                            <select name="statusId" id=""
+                                                                class="block w-full rounded-md border-gray-300 border px-3 py-2 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                                                @foreach ($status as $stat)
+                                                                    @if ($photo->statusId == 2 && ($stat->id == 3 || $stat->id == 4))
+                                                                        <option value="{{ $stat->id }}"
+                                                                            {{ $stat->id == $photo->statusId ? 'selected' : '' }}>
+                                                                            {{ $stat->nama_status }}
+                                                                        </option>
+                                                                    @elseif ($stat->id == $photo->statusId + 1)
+                                                                        <option value="{{ $stat->id }}"
+                                                                            {{ $stat->id == $photo->statusId ? 'selected' : '' }}>
+                                                                            {{ $stat->nama_status }}
+                                                                        </option>
+                                                                    @endif
+                                                                @endforeach
+
+                                                                @if ($photo->statusId === 4)
+                                                                    <option value="2">Ajukan Banding Ulang</option>
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         @if ($photo->statusId == 4)
                                             <button type="button" id="openModalButton"
-                                                class="px-3 py-1 border rounded">Edit</button>
+                                                class="px-3 py-1 border rounded bg-purple-700 text-white text-sm">Edit</button>
                                         @else
                                             <p>No Action</p>
                                         @endif
@@ -126,6 +185,7 @@
         </div>
     </div>
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 @push('scripts')
     <!-- jQuery CDN -->
@@ -189,19 +249,19 @@
                     }
                 },
                 "initComplete": function() {
-                    $('#albumsTable_wrapper').addClass('p-4');
+                    // $('#albumsTable_wrapper').addClass('p-4');
                     $('#albumsTable_filter input').addClass(
-                        'shadow appearance-none border rounded w-50 mb-3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        ' appearance-none border rounded w-50 mb-3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     );
                     $('#albumsTable_length select').addClass(
-                        'shadow appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        ' appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                     );
-                    $('#albumsTable_paginate').addClass('flex justify-end mt-4');
-                    $('#albumsTable_paginate .paginate_button').addClass(
-                        'px-3 py-1 border rounded bg-blue-500 text-white hover:bg-blue-700');
-                    $('#albumsTable_paginate .paginate_button.disabled').addClass(
-                        'bg-blue-300 text-gray-500 cursor-not-allowed');
-                    $('#albumsTable_info').addClass('mt-4 text-gray-700');
+                    // $('#albumsTable_paginate').addClass('flex justify-end mt-4');
+                    // $('#albumsTable_paginate .paginate_button').addClass(
+                    //     'px-3 py-1 border rounded bg-blue-500 text-white hover:bg-blue-700');
+                    // $('#albumsTable_paginate .paginate_button.disabled').addClass(
+                    //     'bg-blue-300 text-gray-500 cursor-not-allowed');
+                    // $('#albumsTable_info').addClass('mt-4 text-gray-700');
                 }
             });
 

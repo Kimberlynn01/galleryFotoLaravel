@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dashboard Member</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     @stack('styles')
     <style>
@@ -190,6 +193,8 @@
             </main>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         document.getElementById('menuButton').addEventListener('click', function() {
@@ -208,6 +213,34 @@
         document.getElementById('profileButton').addEventListener('click', function() {
             document.getElementById('profileDropdown').classList.toggle('hidden');
         });
+    </script>
+
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        @if (session('success'))
+            toastr.success("{{ session('success') }}", 'Success');
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}", 'Error');
+        @endif
     </script>
 
     @stack('scripts')

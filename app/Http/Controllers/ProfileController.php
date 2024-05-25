@@ -35,19 +35,20 @@ class ProfileController extends Controller
             'picture' => 'nullable|image',
         ]);
 
-        if ($request->filled('old_password') && !Hash::check($request->input('old_password'), $user->password)) {
+        if (!Hash::check($request->input('old_password'), $user->password)) {
             return redirect()->back()->withErrors(['old_password' => 'The old password is incorrect.'])->withInput();
         }
 
         $user->name = $request->input('name');
 
         if ($request->input('email') && $request->input('email') !== $user->email) {
-            $user->email = $request->input('email');
             $request->validate([
                 'email' => 'unique:users,email',
             ], [
                 'email.unique' => 'The email has already been taken.',
             ]);
+
+            $user->email = $request->input('email');
         }
 
         if ($request->filled('password')) {
