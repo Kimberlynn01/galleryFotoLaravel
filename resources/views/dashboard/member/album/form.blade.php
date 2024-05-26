@@ -1,5 +1,13 @@
 @extends('dashboard.member.template.main')
 
+@push('styles')
+    <style>
+        .ck-editor__editable {
+            min-height: 200px;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="container mt-5">
         <form class="max-w mx-auto grid grid-cols-2 gap-4" action="{{ route('album.form.post') }}" method="POST"
@@ -41,12 +49,11 @@
                 </div>
             </div>
             <div class="col-span-2">
-                <label for="deskripsi"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi</label>
+                <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deskripsi <label
+                        class="text-red-500">*</label></label>
                 <textarea id="deskripsi"
                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-                    placeholder="Deskripsi Album" name="deskripsi_album" required></textarea>
-                <img id="preview" class="mt-2 rounded-lg  object-cover" style="max-width: 230px" />
+                    placeholder="Deskripsi Album" name="deskripsi_album"></textarea>
             </div>
 
             <button type="submit"
@@ -56,7 +63,24 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+
     <script>
+        ClassicEditor
+            .create(document.querySelector('#deskripsi'), {
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
+                    'undo', 'redo'
+                ],
+            })
+            .then(editor => {
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
         const uploadInput = document.getElementById('upload-btn');
         const imagePreview = document.getElementById('image-preview');
         const filenameDisplay = document.getElementById('filename');

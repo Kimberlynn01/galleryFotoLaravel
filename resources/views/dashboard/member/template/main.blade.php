@@ -188,7 +188,7 @@
             </header>
 
             <!-- Content -->
-            <main class="flex-1 p-4 content">
+            <main class=" p-4 content">
                 @yield('content')
             </main>
         </div>
